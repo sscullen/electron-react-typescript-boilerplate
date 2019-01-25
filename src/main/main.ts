@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, Menu } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 
@@ -21,7 +21,8 @@ function createWindow() {
   );
 
   // Open the Dev Tools
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
+  // mainWindow.loadURL('chrome://gpu');
 
   // Emitted when the window is closed
   mainWindow.on('closed', () => {
@@ -31,6 +32,49 @@ function createWindow() {
     mainWindow = null;
   });
 }
+
+const menu = Menu.buildFromTemplate([
+  {
+      label: 'Menu',
+      // Other code removed for brevity
+      submenu: [
+        {
+          label:'Exit',
+          click() {
+            app.quit()
+          }
+        },
+      ]
+  },
+  {
+      label: 'Developer',
+      submenu: [
+        {
+          label:'Reload App',
+          click() {
+            mainWindow.webContents.reload()
+          }
+        },
+        {
+          label:'Hard Reload App',
+          click() {
+            mainWindow.webContents.reloadIgnoringCache()
+          }
+        },
+        {
+            label:'Show/Hide Dev Tools',
+            click() {
+              mainWindow.webContents.toggleDevTools()
+            }
+        }
+      ]
+  },
+])
+
+Menu.setApplicationMenu(menu);
+
+// app.disableHardwareAcceleration()
+// app.disableDomainBlockingFor3DAPIs()
 
 // This method will be called when Electron has finished initialization
 // and is ready to create browswer windows.
