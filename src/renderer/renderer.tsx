@@ -13,18 +13,9 @@ import OpenLayersMapViewerComponent from '../components/OpenLayersMapViewerCompo
 import MapContainer from './components/map-container';
 
 ReactDOM.render(
-<<<<<<< HEAD
   <div className="mapContainer">
     <h4>Welcome to React, Typescript, and Electron</h4>
     <OpenLayersMapViewerComponent />
-=======
-  <div className="main-content">
-    <h4>Welcome to React, Typescript, and Electron</h4>
-    {/* <div id="mapid" /> */}
-    <MapContainer />
-    <div>Sup</div>
-    <h3>Hello There!</h3>
->>>>>>> e1e57bf2d62960787834410474f0127ee744b24c
   </div>,
   document.getElementById('app')
 );

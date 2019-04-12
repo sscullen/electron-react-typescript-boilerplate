@@ -82,6 +82,8 @@ export interface MapState { workers: any[]; tasks: any[]; map: any }
 // const Map = ReactMapboxGl({
 //     accessToken: "pk.eyJ1Ijoic2N1bGxlbiIsImEiOiJ1UVAwZ19BIn0.wn4ltQcyl9P5j3bAmNJEPg"
 //   });
+var gdal = require("gdal");
+
 
 var imageExtent = [0, 0, 700000, 1300000];
 
@@ -90,7 +92,38 @@ var s2extent = [699960, 5590200, 809760, 5700000]
 var map;
 // var s2extent = [0, 0, 5490, 5490]
 
+const {dialog} = require('electron').remote;
+var fs = require('fs');
+    
+document.getElementById('select-file').addEventListener('click',function(){
+    dialog.showOpenDialog(function (fileNames) {
+        if(fileNames === undefined){
+            console.log("No file selected");
+        }else{
+            document.getElementById("actual-file").innerText = fileNames[0];
+            readFile(fileNames[0]);
+        }
+    }); 
+},false);
 
+function readFile(filepath) {
+    fs.readFile(filepath, 'utf-8', function (err, data) {
+        if(err){
+            alert("An error ocurred reading the file :" + err.message);
+            return;
+        }
+        
+        // document.getElementById("content-editor").value = data;
+        // document.getElementById("actual-file").innerText = fileNames[0];
+        var dataset = gdal.open("sample.shp");
+        var layer = dataset.layers.get(0);
+
+        console.log("number of features: " + layer.features.count());
+        console.log("fields: " + layer.fields.getNames());
+        console.log("extent: " + JSON.stringify(layer.extent));
+        console.log("srs: " + (layer.srs ? layer.srs.toWKT() : 'null'));
+    });
+}
 
 class OpenLayersMapViewerComponent extends React.Component {
     state: MapState = {
